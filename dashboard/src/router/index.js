@@ -1,5 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '../views/Home.vue';
+
+// USANDO LAZY-LOADING
+const Home = () => import('../views/Home/index.vue');
+const FeedBacks = () => import('../views/Feedbacks/index.vue');
+const Credentials = () => import('../views/Credencials/index.vue');
+
+// USANDO DEFINE ASYNC COMPONENT DO PROPRIO VUE-ROUTER
+// import { defineAsyncComponent } from 'vue-router';
+// const FeedBacks = defineAsyncComponent({
+//   loader: () => import('')
+// })
 
 const routes = [
   {
@@ -8,17 +18,32 @@ const routes = [
     component: Home,
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    path: '/feedbacks',
+    name: 'Feedbacks',
+    component: FeedBacks,
+    // PODEMOS ADICIONAR UM METADA DADOS PARA CADA ROTA, NO CASO ESTAMOS FALANDO
+    // QUE O USUÁRIO PRECISA ESTÁ AUTENTICADO PARA ENTRAR NESTA ROTA.
+    meta: {
+      hasAuth: true,
+    },
+  },
+  {
+    path: '/credentials',
+    name: 'credentials',
+    component: Credentials,
+    meta: {
+      hasAuth: true,
+    },
+  },
+  {
+    // REGEX QUE TEM NA PRÓPRIA DOCUMENTAÇÃO DO VUE PARA QND Ñ EXISTIR ESTA ROTA /:pathMatch(.*)*
+    path: '/:pathMatch(.*)*',
+    redirect: { name: 'Home' },
   },
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory('/'),
   routes,
 });
 
