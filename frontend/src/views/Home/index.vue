@@ -11,6 +11,7 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Contact from './Contact.vue'
 import CustomHeader from './CustomHeader.vue'
+import useModal from '../../hooks/useModal'
 
 export default {
   components: {
@@ -19,7 +20,7 @@ export default {
   },
   setup () {
     const router = useRouter()
-
+    const modal = useModal()
     /**
      * Qnd for montado, verificamos se já tem o token, caso sim,
      * fazemos o redirect para feedbacks (passando o name :O)
@@ -31,9 +32,17 @@ export default {
       }
     })
 
-    function handleLogin () {}
+    function handleLogin () {
+      modal.open({
+        component: 'ModalLogin'
+      })
+    }
 
-    function handleAccountCreate () {}
+    function handleAccountCreate () {
+      modal.open({
+        component: 'ModalCreateAccount'
+      })
+    }
 
     return {
       handleLogin,
