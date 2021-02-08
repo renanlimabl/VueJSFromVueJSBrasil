@@ -1,4 +1,5 @@
 # frontend
+- vee-validate@next for validation for forms
 
 ## Project setup
 ```
