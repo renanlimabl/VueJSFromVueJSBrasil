@@ -1,5 +1,7 @@
 import axios from 'axios'
 import AuthService from './auth'
+import UsersService from './users'
+import router from '../router'
 
 const API_ENVS = {
   production: '',
@@ -16,9 +18,25 @@ httpClient.interceptors.response.use((response) => response, (error) => {
   if (canThrowAnError) {
     throw new Error(error.message)
   }
+
+  if (error.response.status === 401) {
+    router.push({ name: 'Home' })
+  }
+
   return error
 })
 
+httpClient.interceptors.request.use(config => {
+  const token = window.localStorage.getItem('token')
+
+  if (token) {
+    config.headers.common.Authorization = `Bearer ${token}`
+  }
+
+  return config
+})
+
 export default {
-  auth: AuthService(httpClient)
+  auth: AuthService(httpClient),
+  users: UsersService(httpClient)
 }
